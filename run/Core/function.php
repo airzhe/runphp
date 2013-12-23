@@ -55,3 +55,72 @@ function C($name=null,$value=null){
 		$_config[$name]=$value;
 	}
 }
+function error($msg,$url=null){
+	$url=is_null($url)?"window.history.go(-1)":"location.href='{$url}'";
+	$html=<<<str
+<div style="border:2px solid yellow;color:red;"><h2>:( $msg</h2></div>
+	<script>
+		setTimeout(function(){
+			{$url}
+		},2000)
+</script>
+str;
+	echo $html;
+	die();
+}
+/**
+ * load_file加载目标目录下的$files数组里的文件
+ * @param $files array
+ * @param type int 为false时候返回文件路径 为true时返回网页路径
+ */
+function load_file($files,$path,$type=false){
+	$path=RUN_PATH.str_replace('.','/',$path);
+	if(!is_dir($path)){error('路径错误');}
+	$arr=glob_file($path);
+	// p($arr);die;
+	$_files='';
+	foreach ($files as $v) {
+		foreach ($arr as $f) {
+			if(strrpos($f, $v)!==false){
+				if($type){ 
+					$f=str_replace($_SERVER['DOCUMENT_ROOT'],'http://'.$_SERVER['HTTP_HOST'],$f);
+					switch ($type) {
+						case 'css':
+						$_files.='<link rel="stylesheet" href="'.$f.'" />'."\n";
+						break;
+						case 'js':
+						$_files.='<script src="'.$f.'"></script>'."\n";
+						break;
+					}
+				}else{
+					$_files[]=$f;
+				}
+			}
+			continue;
+		}
+	}
+	return $_files;
+}
+/**
+ * glob_file 递归取得指定路径下的文件
+ * @param return array;
+ */
+function glob_file($path){
+	static $_f=array();
+	$arr=glob($path.'/*');
+	foreach ($arr as $v) {
+		if(is_file($v)){
+			$_f[]=$v;
+		}else{
+			glob_file($v);
+		}
+	}
+	return $_f;
+}
+/**
+ * import 加载扩展类
+ */
+function import($path){
+	$file=RUN_PATH.'Extend/'.str_replace('.','/',$path).'.class.php';
+	include $file;
+}

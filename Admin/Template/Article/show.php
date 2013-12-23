@@ -1,11 +1,4 @@
-<?php if(!defined('APP_PATH'))die('error')?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>文章列表页展示</title>
-	<link rel="stylesheet" href="Public/css/bootstrap.css">
-</head>
+<?php require C('__PUBLIC__').'header.php';?>
 <body>
 	<div class="container">
 		<div class="page-header">
@@ -18,7 +11,7 @@
 				<th>内容</th>
 				<th>操作</th>
 			</tr>
-			<?php foreach ($data as  $v): ?>	
+			<?php foreach ($_data['data'] as  $v): ?>	
 				<tr>
 					<td><?php echo $v['id']?></td>
 					<td><?php echo $v['title']?></td>

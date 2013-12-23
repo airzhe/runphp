@@ -3,12 +3,22 @@ class ArticleController extends Controller{
 	public $db;
 	public function __construct(){
 		$this->db=new Model('article');
+		$css=array('bootstrap.css','font-awesome.css');
+		$js=array('jquery-1.10.2.min.js');
+		$_css=load_file($css,'Extend.Org.Bootstrap','css');
+		$_js=load_file($js,'Extend.Org.js','js');
+		$this->assign('css',$_css);
+		$this->assign('js',$_js);
 	}
 	public function show(){
-		$data=$this->db->select();
-		$this->display('Article/show.php',$data);
+		$_data=$this->db->select();
+		$this->assign('data',$_data);
+		$this->assign('title','文章列表页面');
+		import("Lib.Code");
+		$this->display('Article/show.php');
 	}
 	public function add(){
+		$this->assign('title','文章添加页面');
 		if(!empty($_POST)){
 			if($this->db->add()){
 				// p(get_class_methods('Model'));
@@ -21,6 +31,7 @@ class ArticleController extends Controller{
 		}	
 	}
 	public function edit(){
+		$this->assign('title','文章编辑页面');
 		$id=isset($_GET['id'])?(int)$_GET['id']:null;
 		if(!$id) return;
 		if(!empty($_POST)){
@@ -31,7 +42,8 @@ class ArticleController extends Controller{
 			}
 		}else{
 			$data=$this->db->where("id=$id")->find();
-			$this->display('Article/edit.php',$data);
+			$this->assign('data',$data);
+			$this->display('Article/edit.php');
 		}
 
 	}

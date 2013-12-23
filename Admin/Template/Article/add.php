@@ -1,11 +1,4 @@
-<?php if(!defined('APP_PATH'))die('error')?>
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>文章添加页面</title>
-	<link rel="stylesheet" href="Public/css/bootstrap.css">
-</head>
+<?php require C('__PUBLIC__').'header.php';?>
 <body>
 	<div class="container">
 		<div class="page-header">
